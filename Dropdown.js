@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import './index.css';
 
 const Dropdown = ({
   options,
@@ -59,70 +58,78 @@ const Dropdown = ({
     setIsOpen(!isOpen);
   };
 
-  const renderDropdown = () => (
-    <div
-      className="absolute left-0 w-full mt-2 bg-white border border-gray-300 rounded-md shadow-lg"
-      style={{ zIndex }}
-      ref={dropdownRef}
-    >
-      {searchable && (
-        <input
-          type="text"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder="Search..."
-          className="w-full px-4 py-2 border-b border-gray-300 focus:outline-none"
-        />
-      )}
-      <ul className="max-h-60 overflow-auto">
-        {filteredOptions.map((option) => (
-          <li
-            key={option}
-            onClick={() => handleOptionClick(option)}
-            className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${
-              multiple && selectedOptions.includes(option) ? 'bg-gray-300' : ''
-            }`}
-          >
-            {renderOption ? renderOption(option) : option}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  const renderDropdown = () =>
+    React.createElement(
+      'div',
+      {
+        className: 'absolute left-0 w-full mt-2 bg-white border border-gray-300 rounded-md shadow-lg',
+        style: { zIndex },
+        ref: dropdownRef,
+      },
+      searchable &&
+        React.createElement('input', {
+          type: 'text',
+          value: search,
+          onChange: handleSearchChange,
+          placeholder: 'Search...',
+          className: 'w-full px-4 py-2 border-b border-gray-300 focus:outline-none',
+        }),
+      React.createElement(
+        'ul',
+        { className: 'max-h-60 overflow-auto' },
+        filteredOptions.map((option) =>
+          React.createElement(
+            'li',
+            {
+              key: option,
+              onClick: () => handleOptionClick(option),
+              className: `cursor-pointer px-4 py-2 hover:bg-gray-200 ${
+                multiple && selectedOptions.includes(option) ? 'bg-gray-300' : ''
+              }`,
+            },
+            renderOption ? renderOption(option) : option
+          )
+        )
+      )
+    );
 
-  return (
-    <div className="relative inline-block w-64">
-      <div
-        onClick={toggleDropdown}
-        className="flex justify-between items-center px-4 py-2 bg-white border border-gray-300 rounded-md cursor-pointer hover:border-gray-400"
-      >
-        <span className="truncate">
-          {multiple
-            ? selectedOptions.length > 0
-              ? selectedOptions.join(', ')
-              : 'Select...'
-            : selectedOptions || 'Select...'}
-        </span>
-        {/* <svg
-          className={`w-4 h-4 ml-2 transition-transform transform ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-            clipRule="evenodd"
-          />
-        </svg> */}
-      </div>
-      {isOpen &&
-        (usePortal
-          ? createPortal(renderDropdown(), document.getElementById(containerId))
-          : renderDropdown())}
-    </div>
+  return React.createElement(
+    'div',
+    { className: 'relative inline-block w-64' },
+    React.createElement(
+      'div',
+      {
+        onClick: toggleDropdown,
+        className: 'flex justify-between items-center px-4 py-2 bg-white border border-gray-300 rounded-md cursor-pointer hover:border-gray-400',
+      },
+      React.createElement(
+        'span',
+        { className: 'truncate' },
+        multiple
+          ? selectedOptions.length > 0
+            ? selectedOptions.join(', ')
+            : 'Select...'
+          : selectedOptions || 'Select...'
+      ),
+      React.createElement(
+        'svg',
+        {
+          className: `w-4 h-4 ml-2 transition-transform transform ${isOpen ? 'rotate-180' : ''}`,
+          xmlns: 'http://www.w3.org/2000/svg',
+          viewBox: '0 0 20 20',
+          fill: 'currentColor',
+        },
+        React.createElement('path', {
+          fillRule: 'evenodd',
+          d: 'M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z',
+          clipRule: 'evenodd',
+        })
+      )
+    ),
+    isOpen &&
+      (usePortal
+        ? createPortal(renderDropdown(), document.getElementById(containerId))
+        : renderDropdown())
   );
 };
 
